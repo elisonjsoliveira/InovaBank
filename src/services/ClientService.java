@@ -1,9 +1,12 @@
 package services;
 
 import entities.Client;
+import interfaces.IClientService;
 import repository.ClientRepository;
+import java.util.List;
+import java.util.Optional;
 
-public class ClientService {
+public class ClientService implements IClientService<Client> {
 
     private final ClientRepository clientRepository;
 
@@ -11,33 +14,36 @@ public class ClientService {
         this.clientRepository = clientRepository;
     }
 
-    public void create(Client newClient){
-        if(newClient != null){
-            this.clientRepository.create(newClient);
-        }
-        else{
+    @Override
+    public void create(Client client) {
+        if (client != null) {
+            this.clientRepository.create(client);
+        } else {
             System.out.println("Client can't be null");
         }
     }
 
-    public void getAll(){
-        System.out.println(this.clientRepository.getAll());
+    @Override
+    public Optional<Client> getById(long id) {
+        return clientRepository.getById(id);
     }
 
-    public void getById(long id){
-        System.out.println(clientRepository.getById(id));
+    @Override
+    public List<Client> getAll() {
+        return clientRepository.getAll();
     }
 
-    public void update(Client client){
-        if(client != null){
+    @Override
+    public void update(Client client) {
+        if (client != null) {
             this.clientRepository.update(client);
-        }
-        else{
+        } else {
             System.out.println("Client does not exist");
         }
     }
 
-    public void delete(long id){
-
+    @Override
+    public void delete(long id) {
+        clientRepository.delete(id);
     }
 }

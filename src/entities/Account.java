@@ -3,7 +3,7 @@ package entities;
 import java.math.BigDecimal;
 import java.util.concurrent.atomic.AtomicLong;
 
-public abstract class Account  {
+public class Account  {
 
     private static final AtomicLong sequence = new AtomicLong();
     private long id;
@@ -11,10 +11,10 @@ public abstract class Account  {
     private double balance;
     private final long clientId;
 
-    public Account(String accountNumber, double balance, long clientId) {
+    public Account(String accountNumber, long clientId) {
         this.id = sequence.getAndIncrement();
         this.accountNumber = accountNumber;
-        this.balance = balance;
+        this.balance = 0;
         this.clientId = clientId;
     }
 

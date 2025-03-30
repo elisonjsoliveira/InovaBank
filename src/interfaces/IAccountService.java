@@ -12,6 +12,6 @@ public interface IAccountService<Account> {
     List<Account> getAll();
     void update(Account account);
     void delete(long id);
-    void deposit(double amount);
-    void withdraw(double amount);
+    void deposit(long id, double amount);
+    void withdraw(long id, double amount);
 }
