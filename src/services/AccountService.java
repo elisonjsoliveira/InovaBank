@@ -51,7 +51,7 @@ public class AccountService implements IAccountService<Account> {
     public void deposit(long id, double amount) {
         accountRepository.getById(id).ifPresentOrElse(account -> {
             if (amount > 0) {
-                account.setBalance(account.getBalance() + amount);
+                account.deposit(amount);
                 accountRepository.update(account);
             } else {
                 System.out.println("Invalid deposit amount");
@@ -63,7 +63,7 @@ public class AccountService implements IAccountService<Account> {
     public void withdraw(long id, double amount) {
         accountRepository.getById(id).ifPresentOrElse(account -> {
             if (amount > 0 && account.getBalance() >= amount) {
-                account.setBalance(account.getBalance() - amount);
+                account.withdraw(amount);
                 accountRepository.update(account);
             } else {
                 System.out.println("Invalid withdrawal operation");

@@ -6,16 +6,21 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class Client {
 
-    private static final AtomicLong sequence = new AtomicLong(1);
     private final long id;
     private String name;
-    private String cpf;
+    private final String cpf;
     private String phone;
     private String email;
-    private LocalDate birthDate;
+    private final LocalDate birthDate;
 
-    public Client(String name, String cpf, String phone, String email, LocalDate birthDate) {
-        this.id = sequence.getAndIncrement();
+    // Não pode haver construtor vazio por conta das variáveis com anotação final.
+    public Client(long id, String cpf, LocalDate birthDate) {
+        this.id = id;
+        this.cpf = cpf;
+        this.birthDate = birthDate;
+    }
+    public Client(long id, String name, String cpf, String phone, String email, LocalDate birthDate) {
+        this.id = id;
         this.name = name;
         this.cpf = cpf;
         this.phone = phone;
@@ -39,10 +44,6 @@ public class Client {
         return cpf;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
     public String getPhone() {
         return phone;
     }
@@ -61,10 +62,6 @@ public class Client {
 
     public LocalDate getBirthDate() {
         return birthDate;
-    }
-
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
     }
 
     @Override

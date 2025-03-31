@@ -1,25 +1,25 @@
 package entities;
 
-import java.math.BigDecimal;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class Account  {
 
-    private static final AtomicLong sequence = new AtomicLong();
-    private long id;
+    private final long id;
     private final String accountNumber;
     private double balance;
     private final long clientId;
 
-    public Account(String accountNumber, long clientId) {
-        this.id = sequence.getAndIncrement();
+    // Não pode haver construtor vazio por conta das variáveis com anotação final.
+    public Account(long id, String accountNumber, long clientId) {
+        this.id = id;
         this.accountNumber = accountNumber;
-        this.balance = 0;
         this.clientId = clientId;
     }
 
-    public void setId(long id){
+    public Account(Long id, String accountNumber, long clientId) {
         this.id = id;
+        this.accountNumber = accountNumber;
+        this.balance = 0;
+        this.clientId = clientId;
     }
 
     public long getId() {
@@ -34,7 +34,8 @@ public class Account  {
         return balance;
     }
 
-    public void setBalance(double balance) {
+    // Método protegido para uso interno (ex: ORM)
+    protected void setBalance(double balance) {
         this.balance = balance;
     }
 
@@ -43,11 +44,20 @@ public class Account  {
     }
 
     public void deposit(double amount){
-        this.balance += amount;
+        if (amount > 0) {
+            this.balance += amount;
+
+        } else {
+            System.out.println("Invalid value");
+        }
     }
 
     public void withdraw(double amount){
-        this.balance -= amount;
+        if (balance - amount >= 0){
+            this.balance -= amount;
+        } else {
+            System.out.println("Invalid value");
+        }
     }
 
 }

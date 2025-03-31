@@ -5,7 +5,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class Card {
 
-    private static final AtomicLong sequence = new AtomicLong(1);
     private final long id;
     private final int cardNumber;
     private LocalDate validity;
@@ -14,8 +13,15 @@ public class Card {
     private double creditLimit;
     private final Long accountId;
 
-    public Card(int cardNumber, LocalDate validity, int cvv, String cardType, double creditLimit, Long accountId) {
-        this.id = sequence.getAndIncrement();
+    // Não pode haver construtor vazio por conta das variáveis com anotação final.
+    public Card(long id, int cardNumber, int cvv, Long accountId) {
+        this.id = id;
+        this.cardNumber = cardNumber;
+        this.cvv = cvv;
+        this.accountId = accountId;
+    }
+    public Card(long id, int cardNumber, LocalDate validity, int cvv, String cardType, double creditLimit, Long accountId) {
+        this.id = id;
         this.cardNumber = cardNumber;
         this.validity = validity;
         this.cvv = cvv;
@@ -43,7 +49,6 @@ public class Card {
     public int getCvv() {
         return cvv;
     }
-
 
     public String getCardType() {
         return cardType;

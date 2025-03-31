@@ -67,12 +67,14 @@ public class InteractiveView {
 
         switch (choice) {
             case 1 -> {
+                System.out.print("Enter account id: ");
+                long id = scanner.nextLong();
                 System.out.print("Enter account number: ");
                 String accountNumber = scanner.nextLine();
                 System.out.print("Enter client ID: ");
                 long clientId = scanner.nextLong();
                 scanner.nextLine();
-                Account account = new Account(accountNumber, clientId);
+                Account account = new Account(id, accountNumber, clientId);
                 accountService.create(account);
                 System.out.println("Account created successfully.");
             }
@@ -92,9 +94,6 @@ public class InteractiveView {
                 accountService.getById(id).ifPresentOrElse(account -> {
                     System.out.print("Enter new account number: ");
                     String newAccountNumber = scanner.nextLine();
-                    System.out.print("Enter new balance: ");
-                    double newBalance = scanner.nextDouble();
-                    account.setBalance(newBalance);
                     accountService.update(account);
                     System.out.println("Account updated successfully.");
                 }, () -> System.out.println("Account not found."));
@@ -125,6 +124,8 @@ public class InteractiveView {
 
             switch (choice) {
                 case 1 -> {
+                    System.out.print("Enter name Id: ");
+                    long id = scanner.nextLong();
                     System.out.print("Enter client name: ");
                     String name = scanner.nextLine();
                     System.out.print("Enter client CPF: ");
@@ -137,7 +138,7 @@ public class InteractiveView {
                     String birthDateStr = scanner.nextLine();
                     LocalDate birthDate = LocalDate.parse(birthDateStr);
 
-                    Client client = new Client(name, cpf, phone, email, birthDate);
+                    Client client = new Client(id, name, cpf, phone, email, birthDate);
                     clientService.create(client);
                     System.out.println("Client created successfully.");
                 }
@@ -158,20 +159,14 @@ public class InteractiveView {
                         System.out.print("Enter new client name: ");
                         String newName = scanner.nextLine();
                         System.out.print("Enter new client CPF: ");
-                        String newCpf = scanner.nextLine();
                         System.out.print("Enter new client phone: ");
                         String newPhone = scanner.nextLine();
                         System.out.print("Enter new client email: ");
                         String newEmail = scanner.nextLine();
-                        System.out.print("Enter new client birth date (YYYY-MM-DD): ");
-                        String newBirthDateStr = scanner.nextLine();
-                        LocalDate newBirthDate = LocalDate.parse(newBirthDateStr);
 
                         client.setName(newName);
-                        client.setCpf(newCpf);
                         client.setPhone(newPhone);
                         client.setEmail(newEmail);
-                        client.setBirthDate(newBirthDate);
                         clientService.update(client);
                         System.out.println("Client updated successfully.");
                     }, () -> System.out.println("Client not found."));
@@ -201,6 +196,9 @@ public class InteractiveView {
 
         switch (choice) {
             case 1 -> {
+                System.out.print("Enter card ID: ");
+                long id = scanner.nextLong();
+                scanner.nextLine();
                 System.out.print("Enter card number: ");
                 int cardNumber = scanner.nextInt();
                 scanner.nextLine();
@@ -219,7 +217,7 @@ public class InteractiveView {
                 long accountId = scanner.nextLong();
                 scanner.nextLine();
 
-                Card card = new Card(cardNumber, validity, cvv, cardType, creditLimit, accountId);
+                Card card = new Card(id, cardNumber, validity, cvv, cardType, creditLimit, accountId);
                 cardService.create(card);
                 System.out.println("Card created successfully.");
             }
@@ -277,6 +275,9 @@ public class InteractiveView {
 
         switch (choice) {
             case 1 -> {
+                System.out.print("Enter ID transaction: ");
+                long id = scanner.nextLong();
+                scanner.nextLine();
                 System.out.print("Enter transaction type (e.g., Deposit, Withdrawal): ");
                 String typeTransaction = scanner.nextLine();
                 System.out.print("Enter transaction value: ");
@@ -292,7 +293,7 @@ public class InteractiveView {
                 long destinationAccountId = scanner.nextLong();
                 scanner.nextLine();
 
-                Transaction transaction = new Transaction(typeTransaction, value, date, originAccountId, destinationAccountId);
+                Transaction transaction = new Transaction(id, typeTransaction, value, date, originAccountId, destinationAccountId);
                 transactionService.create(transaction);
                 System.out.println("Transaction created successfully.");
             }
