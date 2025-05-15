@@ -4,7 +4,7 @@ package entities;
 public class Account  {
 
     private final long id;
-    private final String accountNumber;
+    private String accountNumber;
     private double balance;
     private final long clientId;
 
@@ -28,6 +28,10 @@ public class Account  {
 
     public String getAccountNumber() {
         return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
     public double getBalance() {
