@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class Card {
 
     private final long id;
-    private final int cardNumber;
+    private final long cardNumber;
     private LocalDate validity;
     private final int cvv;
     private String cardType;
@@ -14,13 +14,13 @@ public class Card {
     private final Long accountId;
 
     // Não pode haver construtor vazio por conta das variáveis com anotação final.
-    public Card(long id, int cardNumber, int cvv, Long accountId) {
+    public Card(long id, long cardNumber, int cvv, Long accountId) {
         this.id = id;
         this.cardNumber = cardNumber;
         this.cvv = cvv;
         this.accountId = accountId;
     }
-    public Card(long id, int cardNumber, LocalDate validity, int cvv, String cardType, double creditLimit, Long accountId) {
+    public Card(long id, long cardNumber, LocalDate validity, int cvv, String cardType, double creditLimit, Long accountId) {
         this.id = id;
         this.cardNumber = cardNumber;
         this.validity = validity;
@@ -34,7 +34,7 @@ public class Card {
         return id;
     }
 
-    public int getCardNumber() {
+    public long getCardNumber() {
         return cardNumber;
     }
 

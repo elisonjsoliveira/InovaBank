@@ -8,7 +8,7 @@ public class Client {
 
     private final long id;
     private String name;
-    private final String cpf;
+    private String cpf;
     private String phone;
     private String email;
     private final LocalDate birthDate;
@@ -42,6 +42,10 @@ public class Client {
 
     public String getCpf() {
         return cpf;
+    }
+
+    public void setCPF(String cpf) {
+        this.cpf = cpf;
     }
 
     public String getPhone() {

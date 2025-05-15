@@ -69,6 +69,7 @@ public class InteractiveView {
             case 1 -> {
                 System.out.print("Enter account id: ");
                 long id = scanner.nextLong();
+                scanner.nextLine();
                 System.out.print("Enter account number: ");
                 String accountNumber = scanner.nextLine();
                 System.out.print("Enter client ID: ");
@@ -94,6 +95,7 @@ public class InteractiveView {
                 accountService.getById(id).ifPresentOrElse(account -> {
                     System.out.print("Enter new account number: ");
                     String newAccountNumber = scanner.nextLine();
+                    account.setAccountNumber(newAccountNumber);
                     accountService.update(account);
                     System.out.println("Account updated successfully.");
                 }, () -> System.out.println("Account not found."));
@@ -126,6 +128,7 @@ public class InteractiveView {
                 case 1 -> {
                     System.out.print("Enter name Id: ");
                     long id = scanner.nextLong();
+                    scanner.nextLine();
                     System.out.print("Enter client name: ");
                     String name = scanner.nextLine();
                     System.out.print("Enter client CPF: ");
@@ -159,12 +162,14 @@ public class InteractiveView {
                         System.out.print("Enter new client name: ");
                         String newName = scanner.nextLine();
                         System.out.print("Enter new client CPF: ");
+                        String newCPF = scanner.nextLine();
                         System.out.print("Enter new client phone: ");
                         String newPhone = scanner.nextLine();
                         System.out.print("Enter new client email: ");
                         String newEmail = scanner.nextLine();
 
                         client.setName(newName);
+                        client.setCPF(newCPF);
                         client.setPhone(newPhone);
                         client.setEmail(newEmail);
                         clientService.update(client);
@@ -200,7 +205,7 @@ public class InteractiveView {
                 long id = scanner.nextLong();
                 scanner.nextLine();
                 System.out.print("Enter card number: ");
-                int cardNumber = scanner.nextInt();
+                long cardNumber = scanner.nextInt();
                 scanner.nextLine();
                 System.out.print("Enter card validity (YYYY-MM-DD): ");
                 String validityStr = scanner.nextLine();
