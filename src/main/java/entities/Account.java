@@ -1,28 +1,34 @@
 package entities;
 
+import jakarta.persistence.*;
 
-public class Account  {
+@Entity
+@Table(name = "accounts")
+public class Account {
 
-    private final long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String accountNumber;
+
     private double balance;
-    private final long clientId;
 
-    // Não pode haver construtor vazio por conta das variáveis com anotação final.
-    public Account(long id, String accountNumber, long clientId) {
-        this.id = id;
-        this.accountNumber = accountNumber;
-        this.clientId = clientId;
+    @ManyToOne
+    @JoinColumn(name = "client_id", nullable = false)
+    private Client client;
+
+    public Account() {
+        // Construtor padrão exigido pelo JPA
     }
 
-    public Account(Long id, String accountNumber, long clientId) {
-        this.id = id;
+    public Account(String accountNumber, Client client) {
         this.accountNumber = accountNumber;
-        this.balance = 0;
-        this.clientId = clientId;
+        this.client = client;
+        this.balance = 0.0;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -38,30 +44,27 @@ public class Account  {
         return balance;
     }
 
-    // Método protegido para uso interno (ex: ORM)
     protected void setBalance(double balance) {
         this.balance = balance;
     }
 
-    public long getClientId() {
-        return clientId;
+    public Client getClient() {
+        return client;
     }
 
-    public void deposit(double amount){
+    public void deposit(double amount) {
         if (amount > 0) {
             this.balance += amount;
-
         } else {
             System.out.println("Invalid value");
         }
     }
 
-    public void withdraw(double amount){
-        if (balance - amount >= 0){
+    public void withdraw(double amount) {
+        if (balance - amount >= 0) {
             this.balance -= amount;
         } else {
             System.out.println("Invalid value");
         }
     }
-
 }
