@@ -1,36 +1,45 @@
 package entities;
 
-import java.time.LocalDate;
-import java.util.concurrent.atomic.AtomicLong;
+import jakarta.persistence.*;
 
+import java.time.LocalDate;
+
+@Entity
+@Table(name = "cards")
 public class Card {
 
-    private final long id;
-    private final long cardNumber;
-    private LocalDate validity;
-    private final int cvv;
-    private String cardType;
-    private double creditLimit;
-    private final Long accountId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    // Não pode haver construtor vazio por conta das variáveis com anotação final.
-    public Card(long id, long cardNumber, int cvv, Long accountId) {
-        this.id = id;
-        this.cardNumber = cardNumber;
-        this.cvv = cvv;
-        this.accountId = accountId;
+    private long cardNumber;
+
+    private LocalDate validity;
+
+    private int cvv;
+
+    private String cardType;
+
+    private double creditLimit;
+
+    @ManyToOne
+    @JoinColumn(name = "account_id", nullable = false)
+    private Account account;
+
+    public Card() {
+        // Construtor padrão exigido pelo JPA
     }
-    public Card(long id, long cardNumber, LocalDate validity, int cvv, String cardType, double creditLimit, Long accountId) {
-        this.id = id;
+
+    public Card(long cardNumber, LocalDate validity, int cvv, String cardType, double creditLimit, Account account) {
         this.cardNumber = cardNumber;
         this.validity = validity;
         this.cvv = cvv;
         this.cardType = cardType;
         this.creditLimit = creditLimit;
-        this.accountId = accountId;
+        this.account = account;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -66,8 +75,11 @@ public class Card {
         this.creditLimit = creditLimit;
     }
 
-    public long getAccountId() {
-        return accountId;
+    public Account getAccount() {
+        return account;
     }
 
+    public void setAccount(Account account) {
+        this.account = account;
+    }
 }

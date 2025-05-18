@@ -1,31 +1,47 @@
 package entities;
 
-import java.time.LocalDate;
-import java.util.concurrent.atomic.AtomicLong;
+import jakarta.persistence.*;
 
+import java.time.LocalDate;
+
+@Entity
+@Table(name = "transactions")
 public class Transaction {
 
-    private final long id;
-    private String typeTransaction;
-    private double value;
-    private LocalDate date;
-    private long originAccountId;
-    private long destinationAccountId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    // Não pode haver construtor vazio por conta das variáveis com anotação final.
-    public Transaction(long id) {
-        this.id = 0;
+    @Column(nullable = false)
+    private String typeTransaction;
+
+    @Column(nullable = false)
+    private double value;
+
+    @Column(nullable = false)
+    private LocalDate date;
+
+    @ManyToOne
+    @JoinColumn(name = "origin_account_id", nullable = false)
+    private Account originAccount;
+
+    @ManyToOne
+    @JoinColumn(name = "destination_account_id", nullable = false)
+    private Account destinationAccount;
+
+    public Transaction() {
+        // Construtor vazio exigido pelo JPA
     }
-    public Transaction(long id, String typeTransaction, double value, LocalDate date, long originAccountId, long destinationAccountId) {
-        this.id = id;
+
+    public Transaction(String typeTransaction, double value, LocalDate date, Account originAccount, Account destinationAccount) {
         this.typeTransaction = typeTransaction;
         this.value = value;
         this.date = date;
-        this.originAccountId = originAccountId;
-        this.destinationAccountId = destinationAccountId;
+        this.originAccount = originAccount;
+        this.destinationAccount = destinationAccount;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -53,19 +69,19 @@ public class Transaction {
         this.date = date;
     }
 
-    public long getOriginAccountId() {
-        return originAccountId;
+    public Account getOriginAccount() {
+        return originAccount;
     }
 
-    public void setOriginAccountId(long originAccountId) {
-        this.originAccountId = originAccountId;
+    public void setOriginAccount(Account originAccount) {
+        this.originAccount = originAccount;
     }
 
-    public long getDestinationAccountId() {
-        return destinationAccountId;
+    public Account getDestinationAccount() {
+        return destinationAccount;
     }
 
-    public void setDestinationAccountId(long destinationAccountId) {
-        this.destinationAccountId = destinationAccountId;
+    public void setDestinationAccount(Account destinationAccount) {
+        this.destinationAccount = destinationAccount;
     }
 }

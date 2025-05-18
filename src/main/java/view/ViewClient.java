@@ -72,7 +72,7 @@ public class ViewClient {
                     String newEmail = scanner.nextLine();
 
                     client.setName(newName);
-                    client.setCPF(newCPF);
+                    client.setCpf(newCPF);
                     client.setPhone(newPhone);
                     client.setEmail(newEmail);
                     clientService.update(client);
