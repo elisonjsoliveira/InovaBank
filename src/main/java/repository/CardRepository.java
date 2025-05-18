@@ -1,44 +1,62 @@
 package repository;
 
 import entities.Card;
-import interfaces.CrudRepository;
 import interfaces.ICardRepository;
 
-import java.util.ArrayList;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+
 import java.util.List;
 import java.util.Optional;
 
 public class CardRepository implements ICardRepository<Card> {
-    List<Card> cards = new ArrayList<>();
+
+    private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("bancoPU");
 
     @Override
     public void create(Card card) {
-        cards.add(card);
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        em.persist(card);
+        em.getTransaction().commit();
+        em.close();
     }
 
     @Override
     public Optional<Card> getById(long id) {
-        return cards.stream()
-                .filter(card -> card.getId() == id)
-                .findFirst();
+        EntityManager em = emf.createEntityManager();
+        Card card = em.find(Card.class, id);
+        em.close();
+        return Optional.ofNullable(card);
     }
 
     @Override
     public List<Card> getAll() {
-
-        return new ArrayList<>(cards);
+        EntityManager em = emf.createEntityManager();
+        List<Card> cards = em.createQuery("SELECT c FROM Card c", Card.class).getResultList();
+        em.close();
+        return cards;
     }
 
     @Override
-    public void update(Card cardUpdate) {
-    getById(cardUpdate.getId()).ifPresent(card -> {
-        cards.remove(card);
-        cards.add(cardUpdate);
-    });
+    public void update(Card card) {
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        em.merge(card);
+        em.getTransaction().commit();
+        em.close();
     }
 
     @Override
     public void delete(long id) {
-        cards.removeIf(card -> card.getId() == id);
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        Card card = em.find(Card.class, id);
+        if (card != null) {
+            em.remove(card);
+        }
+        em.getTransaction().commit();
+        em.close();
     }
 }

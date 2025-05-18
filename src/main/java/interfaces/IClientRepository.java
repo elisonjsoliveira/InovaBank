@@ -1,12 +1,13 @@
 package interfaces;
 
+
 import java.util.List;
 import java.util.Optional;
 
-public interface IClientRepository<Client> {
-    void create(Client client);
-    Optional<Client> getById(long id);
-    List<Client> getAll();
-    void update(Client client);
+public interface IClientRepository<T> {
+    void create(T entity);
+    Optional<T> getById(long id);
+    List<T> getAll();
+    void update(T entity);
     void delete(long id);
 }

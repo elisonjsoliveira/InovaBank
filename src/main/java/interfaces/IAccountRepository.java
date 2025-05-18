@@ -1,12 +1,13 @@
 package interfaces;
 
+import entities.Account;
 import java.util.List;
 import java.util.Optional;
 
-public interface IAccountRepository<Account> {
-    void create(Account account);
-    Optional<Account> getById(long id);
-    List<Account> getAll();
-    void update(Account account);
+public interface IAccountRepository<T> {
+    void create(T entity);
+    Optional<T> getById(long id);
+    List<T> getAll();
+    void update(T entity);
     void delete(long id);
 }

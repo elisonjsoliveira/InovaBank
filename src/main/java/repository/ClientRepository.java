@@ -1,44 +1,62 @@
 package repository;
 
 import entities.Client;
-import interfaces.CrudRepository;
 import interfaces.IClientRepository;
 
-import java.util.ArrayList;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+
 import java.util.List;
 import java.util.Optional;
 
 public class ClientRepository implements IClientRepository<Client> {
 
-    private final List<Client> clients = new ArrayList<>();
+    private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("bancoPU");
 
     @Override
     public void create(Client client) {
-        clients.add(client);
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        em.persist(client);
+        em.getTransaction().commit();
+        em.close();
     }
 
     @Override
     public Optional<Client> getById(long id) {
-        return clients.stream()
-                .filter(client -> client.getId() == id)
-                .findFirst();
+        EntityManager em = emf.createEntityManager();
+        Client client = em.find(Client.class, id);
+        em.close();
+        return Optional.ofNullable(client);
     }
 
     @Override
     public List<Client> getAll() {
-        return new ArrayList<>(clients);
+        EntityManager em = emf.createEntityManager();
+        List<Client> clients = em.createQuery("SELECT c FROM Client c", Client.class).getResultList();
+        em.close();
+        return clients;
     }
 
     @Override
-    public void update(Client clientUpdate) {
-        getById(clientUpdate.getId()).ifPresent(client -> {
-            clients.remove(client);
-            clients.add(clientUpdate);
-        });
+    public void update(Client client) {
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        em.merge(client);
+        em.getTransaction().commit();
+        em.close();
     }
 
     @Override
     public void delete(long id) {
-        clients.removeIf(client -> client.getId() == id);
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        Client client = em.find(Client.class, id);
+        if (client != null) {
+            em.remove(client);
+        }
+        em.getTransaction().commit();
+        em.close();
     }
 }

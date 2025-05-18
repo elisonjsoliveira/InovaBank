@@ -1,13 +1,13 @@
 package interfaces;
 
+import entities.Transaction;
 import java.util.List;
 import java.util.Optional;
 
-public interface ITransactionRepository<Transaction> {
-
-    void create(Transaction transaction);
-    Optional<Transaction> getById(long id);
-    List<Transaction> getAll();
-    void update(Transaction transaction);
+public interface ITransactionRepository<T> {
+    void create(T entity);
+    Optional<T> getById(long id);
+    List<T> getAll();
+    void update(T entity);
     void delete(long id);
 }
