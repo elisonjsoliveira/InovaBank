@@ -45,14 +45,11 @@ public class ViewTransaction {
                 LocalDate date = LocalDate.parse(dateStr);
                 System.out.print("Enter origin account number: ");
                 String originAccountNumber = scanner.nextLine();
-//                scanner.nextLine();
 
 
 
                 System.out.print("Enter destination account number: ");
                 String destinationAccountNumber = scanner.nextLine();
-//                scanner.nextLine();
-
                 Optional<Account> originAccount = accountService.getByAccountNumber(originAccountNumber);
                 Optional<Account> destinationAccount =accountService.getByAccountNumber(destinationAccountNumber);
 
@@ -88,10 +85,8 @@ public class ViewTransaction {
                     LocalDate newDate = LocalDate.parse(newDateStr);
                     System.out.print("Enter new origin account number: ");
                     String newOriginAccountNumber = scanner.nextLine();
-//                    scanner.nextLine();
                     System.out.print("Enter new destination account number: ");
                     String newDestinationAccountNumber = scanner.nextLine();
-//                    scanner.nextLine();
 
                     Optional<Account> newOriginAccount = accountService.getByAccountNumber(newOriginAccountNumber);
                     Optional<Account> newDestinationAccount =accountService.getByAccountNumber(newDestinationAccountNumber);

@@ -57,12 +57,22 @@ public class ClientRepository implements IClientRepository<Client> {
     @Override
     public void delete(String cpf) {
         EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        Client client = em.find(Client.class, cpf);
-        if (client != null) {
+        try {
+            em.getTransaction().begin();
+            Client client = em.createQuery("SELECT c FROM Client c WHERE c.cpf = :cpf", Client.class)
+                    .setParameter("cpf", cpf)
+                    .getSingleResult();
             em.remove(client);
+            em.getTransaction().commit();
+        } catch (NoResultException e) {
+            System.out.println("Client not found.");
+            em.getTransaction().rollback();
+        } catch (Exception e) {
+            e.printStackTrace();
+            em.getTransaction().rollback();
+        } finally {
+            em.close();
         }
-        em.getTransaction().commit();
-        em.close();
     }
+
 }

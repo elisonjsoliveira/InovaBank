@@ -48,7 +48,6 @@ public class ViewClient {
             case 2 -> {
                 System.out.print("Enter client CPF: ");
                 String cpf = scanner.nextLine();
-//                scanner.nextLine();
                 clientService.getByCPF(cpf).ifPresentOrElse(
                         System.out::println,
                         () -> System.out.println("Client not found."));
@@ -57,7 +56,6 @@ public class ViewClient {
             case 4 -> {
                 System.out.print("Enter client CPF: ");
                 String cpf = scanner.nextLine();
-//                scanner.nextLine();
                 clientService.getByCPF(cpf).ifPresentOrElse(client -> {
                     System.out.print("Enter new client name: ");
                     String newName = scanner.nextLine();
@@ -79,7 +77,6 @@ public class ViewClient {
             case 5 -> {
                 System.out.print("Enter client CPF: ");
                 String cpf = scanner.nextLine();
-//                scanner.nextLine();
                 clientService.delete(cpf);
                 System.out.println("Client deleted successfully.");
             }

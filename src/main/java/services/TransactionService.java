@@ -1,6 +1,5 @@
 package services;
 
-import entities.Account;
 import entities.Transaction;
 import interfaces.ITransactionService;
 import repository.TransactionRepository;

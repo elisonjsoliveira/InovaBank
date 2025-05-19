@@ -1,5 +1,6 @@
 package repository;
 
+import entities.Account;
 import entities.Card;
 import entities.Client;
 import interfaces.ICardRepository;
@@ -57,12 +58,21 @@ public class CardRepository implements ICardRepository<Card> {
     @Override
     public void delete(long cardNumber) {
         EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        Card card = em.find(Card.class, cardNumber);
-        if (card != null) {
+        try {
+            em.getTransaction().begin();
+            Card card = em.createQuery("SELECT a FROM Card a WHERE a.cardNumber = :cardNumber", Card.class)
+                    .setParameter("cardNumber", cardNumber)
+                    .getSingleResult();
             em.remove(card);
+            em.getTransaction().commit();
+        } catch (NoResultException e) {
+            System.out.println("Account not found.");
+            em.getTransaction().rollback();
+        } catch (Exception e) {
+            e.printStackTrace();
+            em.getTransaction().rollback();
+        } finally {
+            em.close();
         }
-        em.getTransaction().commit();
-        em.close();
     }
 }

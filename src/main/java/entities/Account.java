@@ -25,7 +25,7 @@ public class Account {
     public Account(String accountNumber, Client client) {
         this.accountNumber = accountNumber;
         this.client = client;
-        this.balance = 0.0;
+        this.balance = 2000;
     }
 
     public Long getId() {
@@ -44,7 +44,7 @@ public class Account {
         return balance;
     }
 
-    protected void setBalance(double amount) {
+    public void setBalance(double amount) {
         this.balance += amount;
     }
 

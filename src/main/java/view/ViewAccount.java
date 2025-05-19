@@ -38,7 +38,6 @@ public class ViewAccount {
                 String accountNumber = scanner.nextLine();
                 System.out.print("Enter client CPF: ");
                 String clientCPF = scanner.nextLine();
-//                scanner.nextLine();
 
                 Optional<Client> client = clientService.getByCPF(clientCPF);
 
@@ -54,7 +53,6 @@ public class ViewAccount {
             case 2 -> {
                 System.out.print("Enter account number: ");
                 String accountNumber = scanner.nextLine();
-//                scanner.nextLine();
                 accountService.getByAccountNumber(accountNumber).ifPresentOrElse(
                         System.out::println,
                         () -> System.out.println("Account not found."));
@@ -63,7 +61,6 @@ public class ViewAccount {
             case 4 -> {
                 System.out.print("Enter account number: ");
                 String accountNumber = scanner.nextLine();
-//                scanner.nextLine();
                 accountService.getByAccountNumber(accountNumber).ifPresentOrElse(account -> {
                     System.out.print("Enter new account number: ");
                     String newAccountNumber = scanner.nextLine();
@@ -75,7 +72,6 @@ public class ViewAccount {
             case 5 -> {
                 System.out.print("Enter account number: ");
                 String accountNumber = scanner.nextLine();
-//                scanner.nextLine();
                 accountService.delete(accountNumber);
                 System.out.println("Account deleted successfully.");
             }

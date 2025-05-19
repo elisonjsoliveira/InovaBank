@@ -1,5 +1,6 @@
 package repository;
 
+import entities.Account;
 import entities.Transaction;
 import interfaces.ITransactionRepository;
 
@@ -7,6 +8,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,11 +19,32 @@ public class TransactionRepository implements ITransactionRepository<Transaction
     @Override
     public void create(Transaction transaction) {
         EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.persist(transaction);
-        em.getTransaction().commit();
-        em.close();
+        try {
+            em.getTransaction().begin();
+
+            Account originAccount = em.find(Account.class, transaction.getOriginAccount().getId());
+            Account destinationAccount = em.find(Account.class, transaction.getDestinationAccount().getId());
+
+            if (originAccount.getBalance() < transaction.getValue()) {
+                throw new RuntimeException("Saldo insuficiente na conta de origem.");
+            }
+
+            originAccount.setBalance(originAccount.getBalance() - transaction.getValue());
+            destinationAccount.setBalance(destinationAccount.getBalance() + transaction.getValue());
+
+            em.merge(originAccount);
+            em.merge(destinationAccount);
+            em.persist(transaction);
+
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            throw e;
+        } finally {
+            em.close();
+        }
     }
+
 
     @Override
     public Optional<Transaction> getById(long id) {

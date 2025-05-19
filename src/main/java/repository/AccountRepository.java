@@ -57,12 +57,22 @@ public class AccountRepository implements IAccountRepository<Account> {
     @Override
     public void delete(String accountNumber) {
         EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        Account account = em.find(Account.class, accountNumber);
-        if (account != null) {
+
+        try {
+            em.getTransaction().begin();
+            Account account = em.createQuery("SELECT a FROM Account a WHERE a.accountNumber = :accountNumber", Account.class)
+                    .setParameter("accountNumber", accountNumber)
+                    .getSingleResult();
             em.remove(account);
+            em.getTransaction().commit();
+        } catch (NoResultException e) {
+            System.out.println("Account not found.");
+            em.getTransaction().rollback();
+        } catch (Exception e) {
+            e.printStackTrace();
+            em.getTransaction().rollback();
+        } finally {
+            em.close();
         }
-        em.getTransaction().commit();
-        em.close();
     }
 }

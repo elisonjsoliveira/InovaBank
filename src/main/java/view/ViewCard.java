@@ -51,7 +51,6 @@ public class ViewCard {
                 scanner.nextLine();
                 System.out.print("Enter account number associated with the card: ");
                 String accountNumber = scanner.nextLine();
-//                scanner.nextLine();
 
                 Optional<Account> account = accountService.getByAccountNumber(accountNumber);
 
