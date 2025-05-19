@@ -11,8 +11,9 @@ import java.util.List;
 import java.util.Optional;
 
 public class ClientRepository implements IClientRepository<Client> {
-
-    private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("bancoPU");
+    // Persistence é uma classe utilitária do JPA que carrega o que está configurado no arquivo persistence.xml
+    private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("inovabank");
+    // O createEntityManagerFactory("bancoPU"); vai criar a fabrica de acordo com a configuração da unidade
 
     @Override
     public void create(Client client) {

@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public class AccountRepository implements IAccountRepository<Account> {
 
-    private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("bancoPU");
+    private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("inovabank");
 
     @Override
     public void create(Account account) {
