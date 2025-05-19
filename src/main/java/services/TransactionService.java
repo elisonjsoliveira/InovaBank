@@ -1,5 +1,6 @@
 package services;
 
+import entities.Account;
 import entities.Transaction;
 import interfaces.ITransactionService;
 import repository.TransactionRepository;
@@ -46,4 +47,8 @@ public class TransactionService implements ITransactionService<Transaction> {
     public void delete(long id) {
         transactionRepository.delete(id);
     }
+
+
+
+
 }

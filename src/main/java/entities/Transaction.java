@@ -34,6 +34,18 @@ public class Transaction {
     }
 
     public Transaction(String typeTransaction, double value, LocalDate date, Account originAccount, Account destinationAccount) {
+
+        try{
+            if(value > 0){
+                if(originAccount.getBalance() > value){
+                    originAccount.setBalance(-value);
+                    destinationAccount.setBalance(value);
+                }else throw new RuntimeException("invalid value");
+            }else throw new RuntimeException("value insuficient");
+        }catch (RuntimeException ignored){
+
+        }
+
         this.typeTransaction = typeTransaction;
         this.value = value;
         this.date = date;
@@ -83,5 +95,18 @@ public class Transaction {
 
     public void setDestinationAccount(Account destinationAccount) {
         this.destinationAccount = destinationAccount;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "id=" + getId() +
+                ", typeTransaction='" + getTypeTransaction() + '\'' +
+                ", value=" + getValue() +
+                ", date=" + getDate() +
+                ", originAccount=" + getOriginAccount() +
+                ", destinationAccount=" + getDestinationAccount() +
+                '}';
     }
 }

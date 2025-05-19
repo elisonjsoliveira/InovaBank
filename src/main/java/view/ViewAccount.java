@@ -1,8 +1,11 @@
 package view;
 
 import entities.Account;
+import entities.Client;
 import services.AccountService;
+import services.ClientService;
 
+import java.util.Optional;
 import java.util.Scanner;
 
 public class ViewAccount {
@@ -10,8 +13,11 @@ public class ViewAccount {
     private final AccountService accountService;
     private final Scanner scanner;
 
-    public ViewAccount(AccountService accountService) {
+    private final ClientService clientService;
+
+    public ViewAccount(AccountService accountService, ClientService clientService) {
         this.accountService = accountService;
+        this.clientService = clientService;
         this.scanner = new Scanner(System.in);
     }
 
@@ -28,32 +34,37 @@ public class ViewAccount {
 
         switch (choice) {
             case 1 -> {
-                System.out.print("Enter account id: ");
-                long id = scanner.nextLong();
-                scanner.nextLine();
                 System.out.print("Enter account number: ");
                 String accountNumber = scanner.nextLine();
-                System.out.print("Enter client ID: ");
-                long clientId = scanner.nextLong();
-                scanner.nextLine();
-                Account account = new Account(id, accountNumber, clientId);
-                accountService.create(account);
-                System.out.println("Account created successfully.");
+                System.out.print("Enter client CPF: ");
+                String clientCPF = scanner.nextLine();
+//                scanner.nextLine();
+
+                Optional<Client> client = clientService.getByCPF(clientCPF);
+
+                if(client.isPresent()){
+                    Account account = new Account(accountNumber, client.get());
+                    accountService.create(account);
+                    System.out.println("Account created successfully.");
+                }else{
+                    System.out.println("Account not created.");
+                }
+
             }
             case 2 -> {
-                System.out.print("Enter account ID: ");
-                long id = scanner.nextLong();
-                scanner.nextLine();
-                accountService.getById(id).ifPresentOrElse(
+                System.out.print("Enter account number: ");
+                String accountNumber = scanner.nextLine();
+//                scanner.nextLine();
+                accountService.getByAccountNumber(accountNumber).ifPresentOrElse(
                         System.out::println,
                         () -> System.out.println("Account not found."));
             }
             case 3 -> accountService.getAll().forEach(System.out::println);
             case 4 -> {
-                System.out.print("Enter account ID: ");
-                long id = scanner.nextLong();
-                scanner.nextLine();
-                accountService.getById(id).ifPresentOrElse(account -> {
+                System.out.print("Enter account number: ");
+                String accountNumber = scanner.nextLine();
+//                scanner.nextLine();
+                accountService.getByAccountNumber(accountNumber).ifPresentOrElse(account -> {
                     System.out.print("Enter new account number: ");
                     String newAccountNumber = scanner.nextLine();
                     account.setAccountNumber(newAccountNumber);
@@ -62,10 +73,10 @@ public class ViewAccount {
                 }, () -> System.out.println("Account not found."));
             }
             case 5 -> {
-                System.out.print("Enter account ID: ");
-                long id = scanner.nextLong();
-                scanner.nextLine();
-                accountService.delete(id);
+                System.out.print("Enter account number: ");
+                String accountNumber = scanner.nextLine();
+//                scanner.nextLine();
+                accountService.delete(accountNumber);
                 System.out.println("Account deleted successfully.");
             }
             default -> System.out.println("Invalid choice. Try again.");

@@ -24,8 +24,8 @@ public class ClientService implements IClientService<Client> {
     }
 
     @Override
-    public Optional<Client> getById(long id) {
-        return clientRepository.getById(id);
+    public Optional<Client> getByCPF(String cpf) {
+        return clientRepository.getByCPF(cpf);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class ClientService implements IClientService<Client> {
     }
 
     @Override
-    public void delete(long id) {
-        clientRepository.delete(id);
+    public void delete(String cpf) {
+        clientRepository.delete(cpf);
     }
 }

@@ -24,8 +24,8 @@ public class CardService implements ICardService<Card> {
     }
 
     @Override
-    public Optional<Card> getById(long id) {
-        return cardRepository.getById(id);
+    public Optional<Card> getByCardNumber(long cardNumber) {
+        return cardRepository.getByCardNumber(cardNumber);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class CardService implements ICardService<Card> {
     }
 
     @Override
-    public void delete(long id) {
-        cardRepository.delete(id);
+    public void delete(long cardNumber) {
+        cardRepository.delete(cardNumber);
     }
 }

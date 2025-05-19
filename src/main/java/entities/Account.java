@@ -44,27 +44,22 @@ public class Account {
         return balance;
     }
 
-    protected void setBalance(double balance) {
-        this.balance = balance;
+    protected void setBalance(double amount) {
+        this.balance += amount;
     }
 
     public Client getClient() {
         return client;
     }
 
-    public void deposit(double amount) {
-        if (amount > 0) {
-            this.balance += amount;
-        } else {
-            System.out.println("Invalid value");
-        }
-    }
 
-    public void withdraw(double amount) {
-        if (balance - amount >= 0) {
-            this.balance -= amount;
-        } else {
-            System.out.println("Invalid value");
-        }
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + getId() +
+                ", accountNumber='" + getAccountNumber() + '\'' +
+                ", balance=" + getBalance() +
+                ", client=" + getClient() +
+                '}';
     }
 }

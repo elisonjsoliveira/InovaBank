@@ -1,9 +1,12 @@
 package view;
 
+import entities.Account;
 import entities.Card;
+import services.AccountService;
 import services.CardService;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class ViewCard {
@@ -11,8 +14,11 @@ public class ViewCard {
     private final CardService cardService;
     private final Scanner scanner;
 
-    public ViewCard(CardService cardService) {
+    private final AccountService accountService;
+
+    public ViewCard(CardService cardService, AccountService accountService) {
         this.cardService = cardService;
+        this.accountService = accountService;
         this.scanner = new Scanner(System.in);
     }
 
@@ -29,9 +35,6 @@ public class ViewCard {
 
         switch (choice) {
             case 1 -> {
-                System.out.print("Enter card ID: ");
-                long id = scanner.nextLong();
-                scanner.nextLine();
                 System.out.print("Enter card number: ");
                 long cardNumber = scanner.nextInt();
                 scanner.nextLine();
@@ -46,28 +49,36 @@ public class ViewCard {
                 System.out.print("Enter credit limit: ");
                 double creditLimit = scanner.nextDouble();
                 scanner.nextLine();
-                System.out.print("Enter account ID associated with the card: ");
-                long accountId = scanner.nextLong();
-                scanner.nextLine();
+                System.out.print("Enter account number associated with the card: ");
+                String accountNumber = scanner.nextLine();
+//                scanner.nextLine();
 
-                Card card = new Card(id, cardNumber, validity, cvv, cardType, creditLimit, accountId);
-                cardService.create(card);
-                System.out.println("Card created successfully.");
+                Optional<Account> account = accountService.getByAccountNumber(accountNumber);
+
+                if(account.isPresent()){
+                    Card card = new Card(cardNumber, validity, cvv, cardType, creditLimit, account.get());
+                    cardService.create(card);
+                    System.out.println("Card created successfully.");
+                }else{
+                    System.out.println("Card not created.");
+                }
+
+
             }
             case 2 -> {
-                System.out.print("Enter card ID: ");
-                long id = scanner.nextLong();
+                System.out.print("Enter card number: ");
+                long cardNumber = scanner.nextLong();
                 scanner.nextLine();
-                cardService.getById(id).ifPresentOrElse(
+                cardService.getByCardNumber(cardNumber).ifPresentOrElse(
                         System.out::println,
                         () -> System.out.println("Card not found."));
             }
             case 3 -> cardService.getAll().forEach(System.out::println);
             case 4 -> {
-                System.out.print("Enter card ID: ");
-                long id = scanner.nextLong();
+                System.out.print("Enter card number: ");
+                long cardNumber = scanner.nextLong();
                 scanner.nextLine();
-                cardService.getById(id).ifPresentOrElse(card -> {
+                cardService.getByCardNumber(cardNumber).ifPresentOrElse(card -> {
                     System.out.print("Enter new validity (YYYY-MM-DD): ");
                     String newValidityStr = scanner.nextLine();
                     LocalDate newValidity = LocalDate.parse(newValidityStr);
@@ -85,10 +96,10 @@ public class ViewCard {
                 }, () -> System.out.println("Card not found."));
             }
             case 5 -> {
-                System.out.print("Enter card ID: ");
-                long id = scanner.nextLong();
+                System.out.print("Enter card number: ");
+                long cardNumber = scanner.nextLong();
                 scanner.nextLine();
-                cardService.delete(id);
+                cardService.delete(cardNumber);
                 System.out.println("Card deleted successfully.");
             }
             default -> System.out.println("Invalid choice. Try again.");

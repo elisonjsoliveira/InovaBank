@@ -8,10 +8,8 @@ import java.util.Optional;
 public interface IAccountService<Account> {
 
     void create(Account account);
-    Optional<Account> getById(long id);
+    Optional<Account> getByAccountNumber(String accountNumber);
     List<Account> getAll();
     void update(Account account);
-    void delete(long id);
-    void deposit(long id, double amount);
-    void withdraw(long id, double amount);
+    void delete(String accountNumber);
 }

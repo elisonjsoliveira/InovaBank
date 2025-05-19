@@ -29,9 +29,6 @@ public class ViewClient {
 
         switch (choice) {
             case 1 -> {
-                System.out.print("Enter name Id: ");
-                long id = scanner.nextLong();
-                scanner.nextLine();
                 System.out.print("Enter client name: ");
                 String name = scanner.nextLine();
                 System.out.print("Enter client CPF: ");
@@ -44,24 +41,24 @@ public class ViewClient {
                 String birthDateStr = scanner.nextLine();
                 LocalDate birthDate = LocalDate.parse(birthDateStr);
 
-                Client client = new Client(id, name, cpf, phone, email, birthDate);
+                Client client = new Client(name, cpf, phone, email, birthDate);
                 clientService.create(client);
                 System.out.println("Client created successfully.");
             }
             case 2 -> {
-                System.out.print("Enter client ID: ");
-                long id = scanner.nextLong();
-                scanner.nextLine();
-                clientService.getById(id).ifPresentOrElse(
+                System.out.print("Enter client CPF: ");
+                String cpf = scanner.nextLine();
+//                scanner.nextLine();
+                clientService.getByCPF(cpf).ifPresentOrElse(
                         System.out::println,
                         () -> System.out.println("Client not found."));
             }
             case 3 -> clientService.getAll().forEach(System.out::println);
             case 4 -> {
-                System.out.print("Enter client ID: ");
-                long id = scanner.nextLong();
-                scanner.nextLine();
-                clientService.getById(id).ifPresentOrElse(client -> {
+                System.out.print("Enter client CPF: ");
+                String cpf = scanner.nextLine();
+//                scanner.nextLine();
+                clientService.getByCPF(cpf).ifPresentOrElse(client -> {
                     System.out.print("Enter new client name: ");
                     String newName = scanner.nextLine();
                     System.out.print("Enter new client CPF: ");
@@ -80,10 +77,10 @@ public class ViewClient {
                 }, () -> System.out.println("Client not found."));
             }
             case 5 -> {
-                System.out.print("Enter client ID: ");
-                long id = scanner.nextLong();
-                scanner.nextLine();
-                clientService.delete(id);
+                System.out.print("Enter client CPF: ");
+                String cpf = scanner.nextLine();
+//                scanner.nextLine();
+                clientService.delete(cpf);
                 System.out.println("Client deleted successfully.");
             }
             default -> System.out.println("Invalid choice. Try again.");

@@ -17,10 +17,10 @@ public class InteractiveView {
 
     public InteractiveView(AccountService accountService, CardService cardService, ClientService clientService, TransactionService transactionService) {
 
-        this.viewAccount = new ViewAccount(accountService);
+        this.viewAccount = new ViewAccount(accountService, clientService);
         this.viewClient = new ViewClient(clientService);
-        this.viewCard = new ViewCard(cardService);
-        this.viewTransaction = new ViewTransaction(transactionService);
+        this.viewCard = new ViewCard(cardService, accountService);
+        this.viewTransaction = new ViewTransaction(transactionService, accountService);
     }
 
     public void showMenu() {

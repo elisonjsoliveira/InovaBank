@@ -1,10 +1,12 @@
 package repository;
 
 import entities.Account;
+import entities.Client;
 import interfaces.IAccountRepository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.Persistence;
 
 import java.util.List;
@@ -24,11 +26,15 @@ public class AccountRepository implements IAccountRepository<Account> {
     }
 
     @Override
-    public Optional<Account> getById(long id) {
-        EntityManager em = emf.createEntityManager();
-        Account account = em.find(Account.class, id);
-        em.close();
-        return Optional.ofNullable(account);
+    public Optional<Account> getByAccountNumber(String accountNumber) {
+        try (EntityManager em = emf.createEntityManager()) {
+            Account account = em.createQuery("SELECT a FROM Account a WHERE a.accountNumber = :accountNumber", Account.class)
+                    .setParameter("accountNumber", accountNumber)
+                    .getSingleResult();
+            return Optional.of(account);
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
@@ -49,10 +55,10 @@ public class AccountRepository implements IAccountRepository<Account> {
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(String accountNumber) {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
-        Account account = em.find(Account.class, id);
+        Account account = em.find(Account.class, accountNumber);
         if (account != null) {
             em.remove(account);
         }

@@ -6,8 +6,8 @@ import java.util.Optional;
 public interface IClientService<Client> {
 
     void create(Client client);
-    Optional<Client> getById(long id);
+    Optional<Client> getByCPF(String cpf);
     List<Client> getAll();
     void update(Client client);
-    void delete(long id);
+    void delete(String cpf);
 }

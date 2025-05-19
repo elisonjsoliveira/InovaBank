@@ -5,6 +5,7 @@ import interfaces.IClientRepository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.Persistence;
 
 import java.util.List;
@@ -25,11 +26,15 @@ public class ClientRepository implements IClientRepository<Client> {
     }
 
     @Override
-    public Optional<Client> getById(long id) {
-        EntityManager em = emf.createEntityManager();
-        Client client = em.find(Client.class, id);
-        em.close();
-        return Optional.ofNullable(client);
+    public Optional<Client> getByCPF(String cpf) {
+        try (EntityManager em = emf.createEntityManager()) {
+            Client client = em.createQuery("SELECT c FROM Client c WHERE c.cpf = :cpf", Client.class)
+                    .setParameter("cpf", cpf)
+                    .getSingleResult();
+            return Optional.of(client);
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
@@ -50,10 +55,10 @@ public class ClientRepository implements IClientRepository<Client> {
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(String cpf) {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
-        Client client = em.find(Client.class, id);
+        Client client = em.find(Client.class, cpf);
         if (client != null) {
             em.remove(client);
         }

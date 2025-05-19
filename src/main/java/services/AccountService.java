@@ -24,8 +24,8 @@ public class AccountService implements IAccountService<Account> {
     }
 
     @Override
-    public Optional<Account> getById(long id) {
-        return accountRepository.getById(id);
+    public Optional<Account> getByAccountNumber(String accountNumber) {
+        return accountRepository.getByAccountNumber(accountNumber);
     }
 
     @Override
@@ -43,31 +43,8 @@ public class AccountService implements IAccountService<Account> {
     }
 
     @Override
-    public void delete(long id) {
-        this.accountRepository.delete(id);
+    public void delete(String accountNumber) {
+        this.accountRepository.delete(accountNumber);
     }
 
-    @Override
-    public void deposit(long id, double amount) {
-        accountRepository.getById(id).ifPresentOrElse(account -> {
-            if (amount > 0) {
-                account.deposit(amount);
-                accountRepository.update(account);
-            } else {
-                System.out.println("Invalid deposit amount");
-            }
-        }, () -> System.out.println("Account not found"));
-    }
-
-    @Override
-    public void withdraw(long id, double amount) {
-        accountRepository.getById(id).ifPresentOrElse(account -> {
-            if (amount > 0 && account.getBalance() >= amount) {
-                account.withdraw(amount);
-                accountRepository.update(account);
-            } else {
-                System.out.println("Invalid withdrawal operation");
-            }
-        }, () -> System.out.println("Account not found"));
-    }
 }

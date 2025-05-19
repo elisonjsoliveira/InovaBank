@@ -6,8 +6,8 @@ import java.util.Optional;
 
 public interface IAccountRepository<T> {
     void create(T entity);
-    Optional<T> getById(long id);
+    Optional<T> getByAccountNumber(String accountNumber);
     List<T> getAll();
     void update(T entity);
-    void delete(long id);
+    void delete(String accountNumber);
 }

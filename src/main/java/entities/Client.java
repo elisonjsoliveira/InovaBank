@@ -89,13 +89,24 @@ public class Client {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Client)) return false;
-        Client client = (Client) o;
+        if (!(o instanceof Client client)) return false;
         return Objects.equals(id, client.id);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "id=" + getId() +
+                ", name='" + getName() + '\'' +
+                ", cpf='" + getCpf() + '\'' +
+                ", phone='" + getPhone() + '\'' +
+                ", email='" + getEmail() + '\'' +
+                ", birthDate=" + getBirthDate() +
+                '}';
     }
 }

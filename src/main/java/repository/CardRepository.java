@@ -1,10 +1,12 @@
 package repository;
 
 import entities.Card;
+import entities.Client;
 import interfaces.ICardRepository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.Persistence;
 
 import java.util.List;
@@ -24,11 +26,15 @@ public class CardRepository implements ICardRepository<Card> {
     }
 
     @Override
-    public Optional<Card> getById(long id) {
-        EntityManager em = emf.createEntityManager();
-        Card card = em.find(Card.class, id);
-        em.close();
-        return Optional.ofNullable(card);
+    public Optional<Card> getByCardNumber(long cardNumber) {
+        try (EntityManager em = emf.createEntityManager()) {
+            Card card = em.createQuery("SELECT c FROM Card c WHERE c.cardNumber = :cardNumber", Card.class)
+                    .setParameter("cardNumber", cardNumber)
+                    .getSingleResult();
+            return Optional.of(card);
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
@@ -49,10 +55,10 @@ public class CardRepository implements ICardRepository<Card> {
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(long cardNumber) {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
-        Card card = em.find(Card.class, id);
+        Card card = em.find(Card.class, cardNumber);
         if (card != null) {
             em.remove(card);
         }

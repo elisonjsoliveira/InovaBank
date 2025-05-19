@@ -82,4 +82,16 @@ public class Card {
     public void setAccount(Account account) {
         this.account = account;
     }
+
+    @Override
+    public String toString() {
+        return "Card{" +
+                "id=" + getId() +
+                ", cardNumber=" + getCardNumber() +
+                ", validity=" + getValidity() +
+                ", cvv=" + getCvv() +
+                ", cardType='" + getCardType() + '\'' +
+                ", creditLimit=" + getCreditLimit() +
+                '}';
+    }
 }

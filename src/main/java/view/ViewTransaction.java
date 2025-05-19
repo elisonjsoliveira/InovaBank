@@ -1,9 +1,12 @@
 package view;
 
+import entities.Account;
 import entities.Transaction;
+import services.AccountService;
 import services.TransactionService;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class ViewTransaction {
@@ -11,8 +14,11 @@ public class ViewTransaction {
     private final TransactionService transactionService;
     private final Scanner scanner;
 
-    public ViewTransaction(TransactionService transactionService) {
+    private final AccountService accountService;
+
+    public ViewTransaction(TransactionService transactionService, AccountService accountService) {
         this.transactionService = transactionService;
+        this.accountService = accountService;
         this.scanner = new Scanner(System.in);
     }
 
@@ -29,10 +35,7 @@ public class ViewTransaction {
 
         switch (choice) {
             case 1 -> {
-                System.out.print("Enter ID transaction: ");
-                long id = scanner.nextLong();
-                scanner.nextLine();
-                System.out.print("Enter transaction type (e.g., Deposit, Withdrawal): ");
+                System.out.print("Enter transaction type (e.g., Pix, TED): ");
                 String typeTransaction = scanner.nextLine();
                 System.out.print("Enter transaction value: ");
                 double value = scanner.nextDouble();
@@ -40,16 +43,26 @@ public class ViewTransaction {
                 System.out.print("Enter transaction date (YYYY-MM-DD): ");
                 String dateStr = scanner.nextLine();
                 LocalDate date = LocalDate.parse(dateStr);
-                System.out.print("Enter origin account ID: ");
-                long originAccountId = scanner.nextLong();
-                scanner.nextLine();
-                System.out.print("Enter destination account ID: ");
-                long destinationAccountId = scanner.nextLong();
-                scanner.nextLine();
+                System.out.print("Enter origin account number: ");
+                String originAccountNumber = scanner.nextLine();
+//                scanner.nextLine();
 
-                Transaction transaction = new Transaction(id, typeTransaction, value, date, originAccountId, destinationAccountId);
-                transactionService.create(transaction);
-                System.out.println("Transaction created successfully.");
+
+
+                System.out.print("Enter destination account number: ");
+                String destinationAccountNumber = scanner.nextLine();
+//                scanner.nextLine();
+
+                Optional<Account> originAccount = accountService.getByAccountNumber(originAccountNumber);
+                Optional<Account> destinationAccount =accountService.getByAccountNumber(destinationAccountNumber);
+
+                if(originAccount.isPresent() && destinationAccount.isPresent()){
+                    Transaction transaction = new Transaction(typeTransaction, value, date, originAccount.get(), destinationAccount.get());
+                    transactionService.create(transaction);
+                    System.out.println("Transaction created successfully.");
+                }
+
+
             }
             case 2 -> {
                 System.out.print("Enter transaction ID: ");
@@ -73,20 +86,25 @@ public class ViewTransaction {
                     System.out.print("Enter new transaction date (YYYY-MM-DD): ");
                     String newDateStr = scanner.nextLine();
                     LocalDate newDate = LocalDate.parse(newDateStr);
-                    System.out.print("Enter new origin account ID: ");
-                    long newOriginAccountId = scanner.nextLong();
-                    scanner.nextLine();
-                    System.out.print("Enter new destination account ID: ");
-                    long newDestinationAccountId = scanner.nextLong();
-                    scanner.nextLine();
+                    System.out.print("Enter new origin account number: ");
+                    String newOriginAccountNumber = scanner.nextLine();
+//                    scanner.nextLine();
+                    System.out.print("Enter new destination account number: ");
+                    String newDestinationAccountNumber = scanner.nextLine();
+//                    scanner.nextLine();
 
-                    transaction.setTypeTransaction(newTypeTransaction);
-                    transaction.setValue(newValue);
-                    transaction.setDate(newDate);
-                    transaction.setOriginAccountId(newOriginAccountId);
-                    transaction.setDestinationAccountId(newDestinationAccountId);
-                    transactionService.update(transaction);
-                    System.out.println("Transaction updated successfully.");
+                    Optional<Account> newOriginAccount = accountService.getByAccountNumber(newOriginAccountNumber);
+                    Optional<Account> newDestinationAccount =accountService.getByAccountNumber(newDestinationAccountNumber);
+
+                    if(newOriginAccount.isPresent() && newDestinationAccount.isPresent()){
+                        transaction.setTypeTransaction(newTypeTransaction);
+                        transaction.setValue(newValue);
+                        transaction.setDate(newDate);
+                        transaction.setOriginAccount(newOriginAccount.get());
+                        transaction.setDestinationAccount(newDestinationAccount.get());
+                        transactionService.update(transaction);
+                        System.out.println("Transaction updated successfully.");
+                    }
                 }, () -> System.out.println("Transaction not found."));
             }
             case 5 -> {

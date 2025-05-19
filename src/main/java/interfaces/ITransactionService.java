@@ -1,5 +1,7 @@
 package interfaces;
 
+import entities.Account;
+
 import java.util.List;
 import java.util.Optional;
 
