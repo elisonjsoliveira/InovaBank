@@ -16,8 +16,8 @@
             <!-- JDBC config -->
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
             <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/InovaBank"/>
-            <property name="jakarta.persistence.jdbc.user" value="teste"/>
-            <property name="jakarta.persistence.jdbc.password" value="teste"/>
+            <property name="jakarta.persistence.jdbc.user" value="postgres"/>
+            <property name="jakarta.persistence.jdbc.password" value="#Leticia328"/>
 
             <!-- Hibernate config -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
