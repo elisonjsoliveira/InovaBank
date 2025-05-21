@@ -7,6 +7,7 @@ import interfaces.ITransactionRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+import util.JPAUtil;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -14,11 +15,9 @@ import java.util.Optional;
 
 public class TransactionRepository implements ITransactionRepository<Transaction> {
 
-    private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("inovabank");
-
     @Override
     public void create(Transaction transaction) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
         try {
             em.getTransaction().begin();
 
@@ -48,7 +47,7 @@ public class TransactionRepository implements ITransactionRepository<Transaction
 
     @Override
     public Optional<Transaction> getById(long id) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
         Transaction transaction = em.find(Transaction.class, id);
         em.close();
         return Optional.ofNullable(transaction);
@@ -56,7 +55,7 @@ public class TransactionRepository implements ITransactionRepository<Transaction
 
     @Override
     public List<Transaction> getAll() {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
         List<Transaction> transactions = em.createQuery("SELECT t FROM Transaction t", Transaction.class).getResultList();
         em.close();
         return transactions;
@@ -64,7 +63,7 @@ public class TransactionRepository implements ITransactionRepository<Transaction
 
     @Override
     public void update(Transaction transaction) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
         em.getTransaction().begin();
         em.merge(transaction);
         em.getTransaction().commit();
@@ -73,7 +72,7 @@ public class TransactionRepository implements ITransactionRepository<Transaction
 
     @Override
     public void delete(long id) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
         em.getTransaction().begin();
         Transaction transaction = em.find(Transaction.class, id);
         if (transaction != null) {

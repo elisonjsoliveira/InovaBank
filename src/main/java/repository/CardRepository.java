@@ -9,17 +9,16 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.Persistence;
+import util.JPAUtil;
 
 import java.util.List;
 import java.util.Optional;
 
 public class CardRepository implements ICardRepository<Card> {
 
-    private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("inovabank");
-
     @Override
     public void create(Card card) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
         em.getTransaction().begin();
         em.persist(card);
         em.getTransaction().commit();
@@ -28,7 +27,7 @@ public class CardRepository implements ICardRepository<Card> {
 
     @Override
     public Optional<Card> getByCardNumber(long cardNumber) {
-        try (EntityManager em = emf.createEntityManager()) {
+        try (EntityManager em = JPAUtil.getEntityManager()) {
             Card card = em.createQuery("SELECT c FROM Card c WHERE c.cardNumber = :cardNumber", Card.class)
                     .setParameter("cardNumber", cardNumber)
                     .getSingleResult();
@@ -40,7 +39,7 @@ public class CardRepository implements ICardRepository<Card> {
 
     @Override
     public List<Card> getAll() {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
         List<Card> cards = em.createQuery("SELECT c FROM Card c", Card.class).getResultList();
         em.close();
         return cards;
@@ -48,7 +47,7 @@ public class CardRepository implements ICardRepository<Card> {
 
     @Override
     public void update(Card card) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
         em.getTransaction().begin();
         em.merge(card);
         em.getTransaction().commit();
@@ -57,7 +56,7 @@ public class CardRepository implements ICardRepository<Card> {
 
     @Override
     public void delete(long cardNumber) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
         try {
             em.getTransaction().begin();
             Card card = em.createQuery("SELECT a FROM Card a WHERE a.cardNumber = :cardNumber", Card.class)
